@@ -1,0 +1,44 @@
+// A simple list to hold our tasks (our "brain" for this script)
+let tasks = [
+    { id: 1, description: 'Buy groceries', completed: false },
+    { id: 2, description: 'Call Mom', completed: false }
+];
+
+// 1. Function to add a new task
+function addTask(desc) {
+    const newTask = {
+        id: tasks.length + 1,
+        description: desc,
+        completed: false
+    };
+    tasks.push(newTask);
+    console.log(`✅ Added: "${desc}"`);
+}
+
+// 2. Function to show all tasks
+function showTasks() {
+    console.log("\n--- YOUR CURRENT TASKS ---");
+    tasks.forEach(task => {
+        const status = task.completed ? "[✔]" : "[ ]";
+        console.log(`${task.id}. ${status} ${task.description}`);
+    });
+    console.log("--------------------------\n");
+}
+
+// 3. Function to mark a task as finished
+function completeTask(id) {
+    const task = tasks.find(t => t.id === id);
+    if (task) {
+        task.completed = true;
+        console.log(`⭐ Great job! You finished: "${task.description}"`);
+    } else {
+        console.log("❌ Task not found.");
+    }
+}
+
+// --- Let's run it! ---
+
+showTasks();           // See the initial list
+addTask("Fix the leaky faucet"); // Add a new chore
+completeTask(1);       // Finish the first task
+showTasks();           // See the updated list
