@@ -1,0 +1,70 @@
+const account = {
+    owner: "Alex",
+    balance: 0,
+    transactions: []
+};
+
+function addTransaction(description, amount, category) {
+    const entry = {
+        id: account.transactions.length + 1,
+        description,
+        amount,
+        category,
+        date: new Date().toLocaleDateString()
+    };
+    
+    account.transactions.push(entry);
+    account.balance += amount;
+    
+    const type = amount > 0 ? "Income" : "Expense";
+    console.log(`Recorded ${type}: ${description} (${amount > 0 ? '+' : ''}${amount})`);
+}
+
+function getCategoryReport() {
+    const totals = {};
+    
+    account.transactions.forEach(t => {
+        if (!totals[t.category]) {
+            totals[t.category] = 0;
+        }
+        totals[t.category] += t.amount;
+    });
+
+    return totals;
+}
+
+function displaySummary() {
+    console.log(`\n--- Financial Summary for ${account.owner} ---`);
+    console.log(`Current Balance: $${account.balance.toFixed(2)}`);
+    
+    const report = getCategoryReport();
+    console.log("\nSpending by Category:");
+    
+    for (const category in report) {
+        const amount = report[category];
+        const label = amount < 0 ? "Spent" : "Earned";
+        console.log(`- ${category}: ${label} $${Math.abs(amount).toFixed(2)}`);
+    }
+
+    if (account.balance < 100 && account.balance > 0) {
+        console.log("\n⚠️ Warning: Your balance is getting low.");
+    } else if (account.balance <= 0) {
+        console.log("\n🚨 Alert: You are overdrawn!");
+    } else {
+        console.log("\n✅ You are in good financial standing.");
+    }
+    console.log("------------------------------------------\n");
+}
+
+addTransaction("Monthly Salary", 3500, "Salary");
+addTransaction("Apartment Rent", -1200, "Housing");
+addTransaction("Grocery Store", -150, "Food");
+addTransaction("Internet Bill", -60, "Utilities");
+addTransaction("Freelance Gig", 400, "Salary");
+addTransaction("Dinner Out", -80, "Food");
+addTransaction("New Shoes", -120, "Shopping");
+
+displaySummary();
+
+addTransaction("Car Repair", -2500, "Transport");
+displaySummary();
